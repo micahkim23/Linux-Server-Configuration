@@ -12,10 +12,13 @@ Source: [Udacity](https://www.udacity.com/account#!/development_environment)
 1. Open up terminal
 2. Download private key and take note of public ip address
 3. Move the private key file into the folder ~/.ssh (where ~ is the environment's home directory). If you downloaded the file to the Downloads folder, execute the following command in your terminal.
+  
   `$ mv ~/Downloads/udacity_key.rsa ~/.ssh/`
 4. Open your terminal and type in
+  
   `$ chmod 600 ~/.ssh/udacity_key.rsa`
 5. In the terminal type in
+  
   `$ ssh -i ~/.ssh/udacity_key.rsa root@PUBLIC-IP-ADDRESS`
 
 ## 3 & 4 Create New User and Give User Permission to Sudo
@@ -23,22 +26,28 @@ Source: [Udacity](https://www.udacity.com/account#!/development_environment)
 Source: [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-add-and-delete-users-on-an-ubuntu-14-04-vps)
 
 1. Create a new user:
-'''$ adduser newuser'''
+
+  `$ adduser newuser`
 2. Give user permission to sudo:
 	1. Open up visudo (user configuration file):
-	  `$ visudo`
+	  
+    `$ visudo`
 	2. Search for the line that says:
-	  `root ALL=(ALL:ALL) ALL`
+	  
+    `root ALL=(ALL:ALL) ALL`
 	3. Below that line type:
-	  `newuser ALL=(ALL:ALL) ALL`
+	  
+    `newuser ALL=(ALL:ALL) ALL`
 
 ## 5 Update all currently installed packages:
 
 Source: [Udacity Configuring Linux Web Servers Course](https://www.udacity.com/course/configuring-linux-web-servers--ud299-nd)
 
 1. Update available packages and versions:
+  
   `$ sudo apt-get update`
 2. Install newer versions of packages:
+  
   `$ sudo apt-get upgrade`
 
 ## 6 Change SSH port from 22 to 2200 and configure SSH access
@@ -47,48 +56,67 @@ Source: [Udacity Configuring Linux Web Servers Course](https://www.udacity.com/c
 
 1. Change ssh config file:
 	1. Open the config file:
-	  `$ nano /etc/ssh/sshd_config`
+	  
+    `$ nano /etc/ssh/sshd_config`
 	2. Search for the line that says:
-	  `port 22`
+	  
+    `port 22`
 	Change that line to:
-	  `port 2200`
+	  
+    `port 2200`
 	3. Search for the line that says:
-	  `PasswordAuthentication no`
+	  
+    `PasswordAuthentication no`
 	Change that line to:
-	  `PasswordAuthentication yes`
+	  
+    `PasswordAuthentication yes`
 	(note: temporarily allow PasswordAuthentication)
 	4. Change PermitRootLogin to no:
-	  `PermitRootLogin no`
+	  
+    `PermitRootLogin no`
 	5. Append:
-	  `AllowUsers newuser`
+	  
+    `AllowUsers newuser`
 	6. reload the configuration:
-	  `$ service ssh reload`
+	  
+    `$ service ssh reload`
 	7. Open a new terminal window and login in as newuser with password
-	  `$ ssh newuser@PUBLIC-IP-ADDRESS`
+	  
+    `$ ssh newuser@PUBLIC-IP-ADDRESS`
 2. Create SSH KEY:
 	1. Generate a SSH key pair on the local machine in a new terminal window:
-	  `$ ssh-keygen`
+	  
+    `$ ssh-keygen`
 	(note: the default key files are id_rsa and id_rsa.pub)
 3. Make sure newuser has public SSH KEY:
 	1. In the terminal window that you were logged in as newuser, create a new directory called .ssh:
-	  `$ mkdir .ssh`
+	  
+    `$ mkdir .ssh`
 	2. create an empty authorized_keys file inside of .ssh:
-	  `$ touch .ssh/authorized_keys`
+	  
+    `$ touch .ssh/authorized_keys`
 	3. in a new terminal window, copy contents of ~/.ssh/id_rsa.pub:
-	  `$ cat .ssh/id_rsa.pub`
+	  
+    `$ cat .ssh/id_rsa.pub`
 	4. paste contents of ~/.ssh/id_rsa.pub into newuser's authorized_keys file:
-	  `$ nano .ssh/authorized_keys`
+	  
+    `$ nano .ssh/authorized_keys`
 	5. change file permissions:
-	  `$ chmod 700 .ssh`
-	  `$ chmod 644 .ssh/authorized_keys`
+
+	  ```
+      $ chmod 700 .ssh
+	    $ chmod 644 .ssh/authorized_keys
+    ```
 4. login as newuser using SSH KEY:
 	1.  `$ ssh newuser@PUBLIC-IP-ADDRESS -p 2200 -i ~/.ssh/id_rsa`
 5. Change Password Authentication back to no:
 	1. while logged as newuser, type:
+
 	  `$ sudo nano /etc/ssh/sshd_config`
 	2. change password Authentication:
 	PasswordAuthentication no
 	3. reload the configuration:
+
 	  `$ sudo service ssh reload`
 
 ## 7 Configure the Uncomplicated Firewall(UFW) to only allow connections for SSH (port 2200), HTTP (port 80), and NTP (port 123)
@@ -96,18 +124,25 @@ Source: [Udacity Configuring Linux Web Servers Course](https://www.udacity.com/c
 Source: [Udacity Configuring Linux Web Servers Course](https://www.udacity.com/course/configuring-linux-web-servers--ud299-nd)
 
 1. Deny all incoming connections:
+
   `$ sudo ufw default deny incoming`
 2. Allow all outgoing connections:
+
   `$ sudo ufw default allow outgoing`
 3. Allow incoming TCP packets on port 2200 (SSH):
+
   `$ sudo ufw allow 2200/tcp`
 4. Allow incoming TCP pakcets on port 80 (HTTP):
+
   `$ sudo ufw allow 80/tcp`
 5. Allow incoming UDP packets on port 123 (NTP):
+
   `$ sudo ufw allow 123/udp`
 6. enable firewall:
+
   `$ sudo ufw enable`
 7. check status of firewall:
+
   `$ sudo ufw status`
 
 ## 8 Configure local timezone to UTC
@@ -115,6 +150,7 @@ Source: [Udacity Configuring Linux Web Servers Course](https://www.udacity.com/c
 Source: [Ubuntu documentation](https://help.ubuntu.com/community/UbuntuTime#Using_the_Command_Line_.28terminal.29)
 
 1. open timezone selection dialog
+
   `$ sudo dpkg-reconfigure tzdata`
 2. Choose 'none of the above', then select UTC
 
@@ -133,8 +169,10 @@ Source: [Udacity Configuring Linux Web Servers Course](https://www.udacity.com/c
 ## 10 Install and configure Postgresql
 
 1. To install PostgreSQL, type:
+
   `$ sudo apt-get install postgresql`
 2. Check that it doesn't allow remote connections:
+
   `$ sudo nano /etc/postgresql/9.3/main/pg_hba.conf`
 
 ## 11 Install git, clone and setup Catalog App project
@@ -144,10 +182,13 @@ Source: [Udacity Configuring Linux Web Servers Course](https://www.udacity.com/c
 Source: [Github](https://help.github.com/articles/set-up-git/#platform-linux)
 
 1. Install Git:
+
   `$ sudo apt-get install git`
 2. Set your name:
+
   `$ git config --global user.name "YOUR NAME"`
 3. Set your email:
+
   `$ git config --global user.email ""YOUR EMAIL ADDRESS"`
 
 ### 11.2 - Setup for deploying a Flask Application on Ubuntu VPS
@@ -247,6 +288,7 @@ Source: [DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-d
 
 ### 11.4 - Install needed modules & packages
 1. Install httplib2 module:
+
   `$ sudo pip install httplib2`
 2. Install requests module:  
   `$ sudo pip install requests`
@@ -287,10 +329,12 @@ Source: [DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-d
   
 1. Open http://www.hcidata.info/host2ip.cgi and receive the Host name for your public IP-address, e.g. for 54.200.104.123, its ec2-54-200-104-103.us-west-2.compute.amazonaws.com
 2. Open the Apache configuration files for the web app:
+
   `$ sudo nano /etc/apache2/sites-available/FlaskApp.conf`
 3. Paste in the following line below ServerAdmin:  
   `ServerAlias HOSTNAME`, e.g. ec2-54-200-104-103.us-west-2.compute.amazonaws.com
 4. if you go to e.g. ec2-54-200-104-103.us-west-2.compute.amazonaws.com and your application is not displayed, go to:
+
   `$ sudo nano /etc/apache2/sites-enabled/000-default.conf` 
   1. make sure its contents are the same as that of /etc/apache/sites-available/FlaskApp.conf
 5. To get the Google+ authorization working:  
@@ -299,5 +343,6 @@ Source: [DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-d
   3. add your host name and public IP-address to your Authorized JavaScript origins and your host name + oauth2callback to Authorized redirect URIs, e.g. http://ec2-54-200-104-103.us-west-2.compute.amazonaws.com/oauth2callback
 6. This would have changed your client_secrets.json file, so grab the new file and update your old file.
 7. Restart Apache:
+
   `$ sudo service apache2 restart`
 
