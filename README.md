@@ -25,11 +25,11 @@ Source: [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-
 1. Create a new user:
 '''$ adduser newuser'''
 2. Give user permission to sudo:
-	i. Open up visudo (user configuration file):
+	1. Open up visudo (user configuration file):
 	  `$ visudo`
-	ii. Search for the line that says:
+	2. Search for the line that says:
 	  `root ALL=(ALL:ALL) ALL`
-	iii. Below that line type:
+	3. Below that line type:
 	  `newuser ALL=(ALL:ALL) ALL`
 
 ## 5 Update all currently installed packages:
@@ -46,49 +46,49 @@ Source: [Udacity Configuring Linux Web Servers Course](https://www.udacity.com/c
 Source: [Udacity Configuring Linux Web Servers Course](https://www.udacity.com/course/configuring-linux-web-servers--ud299-nd)
 
 1. Change ssh config file:
-	i. Open the config file:
+	1. Open the config file:
 	  `$ nano /etc/ssh/sshd_config`
-	ii. Search for the line that says:
+	2. Search for the line that says:
 	  `port 22`
 	Change that line to:
 	  `port 2200`
-	iii. Search for the line that says:
+	3. Search for the line that says:
 	  `PasswordAuthentication no`
 	Change that line to:
 	  `PasswordAuthentication yes`
 	(note: temporarily allow PasswordAuthentication)
-	iv. Change PermitRootLogin to no:
+	4. Change PermitRootLogin to no:
 	  `PermitRootLogin no`
-	v. Append:
+	5. Append:
 	  `AllowUsers newuser`
-	vi. reload the configuration:
+	6. reload the configuration:
 	  `$ service ssh reload`
-	vii. Open a new terminal window and login in as newuser with password
+	7. Open a new terminal window and login in as newuser with password
 	  `$ ssh newuser@PUBLIC-IP-ADDRESS`
 2. Create SSH KEY:
-	i. Generate a SSH key pair on the local machine in a new terminal window:
+	1. Generate a SSH key pair on the local machine in a new terminal window:
 	  `$ ssh-keygen`
 	(note: the default key files are id_rsa and id_rsa.pub)
 3. Make sure newuser has public SSH KEY:
-	i. In the terminal window that you were logged in as newuser, create a new directory called .ssh:
+	1. In the terminal window that you were logged in as newuser, create a new directory called .ssh:
 	  `$ mkdir .ssh`
-	ii. create an empty authorized_keys file inside of .ssh:
+	2. create an empty authorized_keys file inside of .ssh:
 	  `$ touch .ssh/authorized_keys`
-	iii. in a new terminal window, copy contents of ~/.ssh/id_rsa.pub:
+	3. in a new terminal window, copy contents of ~/.ssh/id_rsa.pub:
 	  `$ cat .ssh/id_rsa.pub`
-	iv. paste contents of ~/.ssh/id_rsa.pub into newuser's authorized_keys file:
+	4. paste contents of ~/.ssh/id_rsa.pub into newuser's authorized_keys file:
 	  `$ nano .ssh/authorized_keys`
-	v. change file permissions:
+	5. change file permissions:
 	  `$ chmod 700 .ssh`
 	  `$ chmod 644 .ssh/authorized_keys`
 4. login as newuser using SSH KEY:
-	i.  `$ ssh newuser@PUBLIC-IP-ADDRESS -p 2200 -i ~/.ssh/id_rsa`
+	1.  `$ ssh newuser@PUBLIC-IP-ADDRESS -p 2200 -i ~/.ssh/id_rsa`
 5. Change Password Authentication back to no:
-	i. while logged as newuser, type:
+	1. while logged as newuser, type:
 	  `$ sudo nano /etc/ssh/sshd_config`
-	ii. change password Authentication:
+	2. change password Authentication:
 	PasswordAuthentication no
-	iii. reload the configuration:
+	3. reload the configuration:
 	  `$ sudo service ssh reload`
 
 ## 7 Configure the Uncomplicated Firewall(UFW) to only allow connections for SSH (port 2200), HTTP (port 80), and NTP (port 123)
@@ -158,15 +158,15 @@ Source: [DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-d
 2. Enable mod_wsgi (if not already enabled):  
   `$ sudo a2enmod wsgi`
 3. Create a Flask app:  
-  i. Move to the www directory:  
+  1. Move to the www directory:  
     `$ cd /var/www`
-  ii. Setup a directory for the app, e.g. catalog:  
-    a. `$ sudo mkdir FlaskApp`  
-    b. `$ cd FlaskApp` and `$ sudo mkdir FlaskApp`  
-    c. `$ cd FlaskApp` and `$ sudo mkdir static templates`  
-    d. Create the file that will contain the flask application logic:  
+  2. Setup a directory for the app, e.g. catalog:  
+    1. `$ sudo mkdir FlaskApp`  
+    2. `$ cd FlaskApp` and `$ sudo mkdir FlaskApp`  
+    3. `$ cd FlaskApp` and `$ sudo mkdir static templates`  
+    4. Create the file that will contain the flask application logic:  
       `$ sudo nano __init__.py`
-    e. Paste in the following code:  
+    5. Paste in the following code:  
     ```python  
       from flask import Flask  
       app = Flask(__name__)  
@@ -177,24 +177,24 @@ Source: [DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-d
         app.run()  
     ```  
 4. Install Flask
-  i. Install pip installer:  
+  1. Install pip installer:  
     `$ sudo apt-get install python-pip` 
-  ii. Install virtualenv:  
+  2. Install virtualenv:  
     `$ sudo pip install virtualenv`
-  iii. Set virtual environment to name 'venv':  
+  3. Set virtual environment to name 'venv':  
     `$ sudo virtualenv venv`
-  iv. Activate the virtual environment:  
+  4. Activate the virtual environment:  
     `$ source venv/bin/activate`
-  v. Install Flask inside the virtual environment:  
+  5. Install Flask inside the virtual environment:  
     `$ pip install Flask`
-  vi. Run the app:  
+  6. Run the app:  
     `$ python __init__.py`
-  vii. Deactivate the environment:  
+  7. Deactivate the environment:  
     `$ deactivate`
 5. Configure and Enable a New Virtual Host#
-  i. Create a virtual host config file  
+  1. Create a virtual host config file  
     `$ sudo nano /etc/apache2/sites-available/FlaskApp.conf`
-  ii. Paste in the following lines of code and change names and addresses regarding your application:  
+  2. Paste in the following lines of code and change names and addresses regarding your application:  
   ```
     <VirtualHost *:80>
         ServerName PUBLIC-IP-ADDRESS
@@ -214,12 +214,12 @@ Source: [DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-d
         CustomLog ${APACHE_LOG_DIR}/access.log combined
     </VirtualHost>
   ```
-  iii. Enable the virtual host:  
+  3. Enable the virtual host:  
     `$ sudo a2ensite FlaskApp`
 6. Create the .wsgi File and Restart Apache
-  i. Create wsgi file:  
+  1. Create wsgi file:  
     `$ cd /var/www/FlaskApp` and `$ sudo nano FlaskApp.wsgi`
-  ii. Paste in the following lines of code:  
+  2. Paste in the following lines of code:  
   ```
     #!/usr/bin/python
     import sys
