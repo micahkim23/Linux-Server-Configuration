@@ -31,13 +31,13 @@ Source: [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-
 2. Give user permission to sudo:
 	1. Open up visudo (user configuration file):
 	  
-    `$ visudo`
+      `$ visudo`
 	2. Search for the line that says:
 	  
-    `root ALL=(ALL:ALL) ALL`
+      `root ALL=(ALL:ALL) ALL`
 	3. Below that line type:
 	  
-    `newuser ALL=(ALL:ALL) ALL`
+      `newuser ALL=(ALL:ALL) ALL`
 
 ## 5 Update all currently installed packages:
 
@@ -45,10 +45,10 @@ Source: [Udacity Configuring Linux Web Servers Course](https://www.udacity.com/c
 
 1. Update available packages and versions:
   
-  `$ sudo apt-get update`
+    `$ sudo apt-get update`
 2. Install newer versions of packages:
   
-  `$ sudo apt-get upgrade`
+    `$ sudo apt-get upgrade`
 
 ## 6 Change SSH port from 22 to 2200 and configure SSH access
 
@@ -57,32 +57,32 @@ Source: [Udacity Configuring Linux Web Servers Course](https://www.udacity.com/c
 1. Change ssh config file:
 	1. Open the config file:
 	  
-    `$ nano /etc/ssh/sshd_config`
+      `$ nano /etc/ssh/sshd_config`
 	2. Search for the line that says:
 	  
-    `port 22`
+      `port 22`
 	Change that line to:
 	  
-    `port 2200`
+      `port 2200`
 	3. Search for the line that says:
 	  
-    `PasswordAuthentication no`
+      `PasswordAuthentication no`
 	Change that line to:
-	  
-    `PasswordAuthentication yes`
+	   
+      `PasswordAuthentication yes`
 	(note: temporarily allow PasswordAuthentication)
 	4. Change PermitRootLogin to no:
 	  
-    `PermitRootLogin no`
+      `PermitRootLogin no`
 	5. Append:
 	  
-    `AllowUsers newuser`
+      `AllowUsers newuser`
 	6. reload the configuration:
 	  
-    `$ service ssh reload`
+      `$ service ssh reload`
 	7. Open a new terminal window and login in as newuser with password
 	  
-    `$ ssh newuser@PUBLIC-IP-ADDRESS`
+      `$ ssh newuser@PUBLIC-IP-ADDRESS`
 2. Create SSH KEY:
 	1. Generate a SSH key pair on the local machine in a new terminal window:
 	  
@@ -94,13 +94,13 @@ Source: [Udacity Configuring Linux Web Servers Course](https://www.udacity.com/c
     `$ mkdir .ssh`
 	2. create an empty authorized_keys file inside of .ssh:
 	  
-    `$ touch .ssh/authorized_keys`
+      `$ touch .ssh/authorized_keys`
 	3. in a new terminal window, copy contents of ~/.ssh/id_rsa.pub:
-	  
-    `$ cat .ssh/id_rsa.pub`
+	   
+      `$ cat .ssh/id_rsa.pub`
 	4. paste contents of ~/.ssh/id_rsa.pub into newuser's authorized_keys file:
 	  
-    `$ nano .ssh/authorized_keys`
+      `$ nano .ssh/authorized_keys`
 	5. change file permissions:
 
 	  ```
