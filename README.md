@@ -168,12 +168,45 @@ Source: [Udacity Configuring Linux Web Servers Course](https://www.udacity.com/c
 
 ## 10 Install and configure Postgresql
 
+Source: [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps)
+
 1. To install PostgreSQL, type:
 
   `$ sudo apt-get install postgresql`
 2. Check that it doesn't allow remote connections:
 
   `$ sudo nano /etc/postgresql/9.3/main/pg_hba.conf`
+3. Open the database setup file:  
+  `$ sudo nano catalogusers_setup.py`
+4. Change the line starting with "engine" to (fill in a password):  
+  `engine = create_engine('postgresql://catalog:PW-FOR-DB@localhost/catalog')`  
+5. Change the same line in application.py respectively
+6. Rename application.py:  
+  `$ mv application.py __init__.py`
+7. Create needed linux user for psql:  
+  `$ sudo adduser catalog` (choose a password)
+8. Change to default user postgres:  
+  `$ sudo su - postgre`
+9. Connect to the system:  
+  `$ psql`
+10. Add postgre user with password:  
+  Sources: [Trackets Blog](http://blog.trackets.com/2013/08/19/postgresql-basics-by-example.html)
+  1. Create user with LOGIN role and set a password:  
+    `# CREATE USER catalog WITH PASSWORD 'PW-FOR-DB';` (# stands for the command prompt in psql)
+  2. Allow the user to create database tables:  
+    `# ALTER USER catalog CREATEDB;`
+11. Create database:  
+  `# CREATE DATABASE catalog WITH OWNER catalog;`
+12. Connect to the database catalog
+  `# \c catalog` 
+13. Revoke all rights:  
+  `# REVOKE ALL ON SCHEMA public FROM public;`
+14. Grant only access to the catalog role:  
+  `# GRANT ALL ON SCHEMA public TO catalog;`
+15. Exit out of PostgreSQl and the postgres user:  
+  `# \q`, then `$ exit` 
+16. Create postgreSQL database schema:  
+  $ python catalogusers_setup.py
 
 ## 11 Install git, clone and setup Catalog App project
 
