@@ -91,7 +91,7 @@ Source: [Udacity Configuring Linux Web Servers Course](https://www.udacity.com/c
 3. Make sure newuser has public SSH KEY:
 	1. In the terminal window that you were logged in as newuser, create a new directory called .ssh:
 	  
-    `$ mkdir .ssh`
+      `$ mkdir .ssh`
 	2. create an empty authorized_keys file inside of .ssh:
 	  
       `$ touch .ssh/authorized_keys`
