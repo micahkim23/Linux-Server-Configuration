@@ -220,15 +220,81 @@ Source: [DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-d
   1. Create wsgi file:  
     `$ cd /var/www/FlaskApp` and `$ sudo nano FlaskApp.wsgi`
   2. Paste in the following lines of code:  
-  ```
-    #!/usr/bin/python
-    import sys
-    import logging
-    logging.basicConfig(stream=sys.stderr)
-    sys.path.insert(0,"/var/www/catalog/")
+    ```
+      #!/usr/bin/python
+      import sys
+      import logging
+      logging.basicConfig(stream=sys.stderr)
+      sys.path.insert(0,"/var/www/catalog/")
     
-    from catalog import app as application
-    application.secret_key = 'Add your secret key'
-  ```
-  7. Restart Apache:  
+      from catalog import app as application
+      application.secret_key = 'Add your secret key'
+    ```
+  3. Restart Apache:  
     `$ sudo service apache2 restart`
+
+### 11.3 - Clone GitHub repository and make it web inaccessible
+1. Clone project 3 solution repository on GitHub:  
+  `$ git clone https://github.com/micahkim23/FSND-P3_Catalog-Web-App.git`
+2. Move all content of created FSND-P3_Catalog-Web-App directory to `/var/www/FlaskApp/FlaskApp/`-directory and delete the leftover empty directory.
+3. Make the GitHub repository inaccessible:  
+  Source: [Stackoverflow](http://stackoverflow.com/questions/6142437/make-git-directory-web-inaccessible)
+  1. Create and open .htaccess file:  
+    `$ cd /var/www/FlaskApp/` and `$ sudo nano .htaccess` 
+  2. Paste in the following:  
+    `RedirectMatch 404 /\.git`
+
+### 11.4 - Install needed modules & packages
+1. Install httplib2 module:
+  `$ sudo pip install httplib2`
+2. Install requests module:  
+  `$ sudo pip install requests`
+3. Install oauth2client.client:  
+  `$ sudo pip install --upgrade oauth2client`
+4. Install SQLAlchemy:  
+  `$ sudo pip install sqlalchemy`
+5. Install the Python PostgreSQL adapter psycopg:  
+  `$ sudo apt-get install python-psycopg2`
+6. Make sure Flask version number matches Catalog's version number :
+  ```
+    $ python
+    >> import flask
+    >> flask.__version__
+  ```
+7. You may or may not have to run the following code depending on your flask version:
+  ```
+    sudo pip install werkzeug==0.8.3
+    sudo pip install flask==0.9
+    sudo pip install Flask-Login==0.1.3
+  ```
+
+#### 11.5 - Run application 
+1. Restart Apache:  
+  `$ sudo service apache2 restart`
+2. Open a browser and put in your public ip-address as url, e.g. 54.200.104.123 - if everything works, the application should come up
+3. If getting an internal server error, check the Apache error files:  
+  1. View the last 20 lines in the error log: 
+    `$ sudo tail -20 /var/log/apache2/error.log`
+  2. If a file like 'client_secrets.json' cant't been found, write full path in __init__.py:  
+      1. `CLIENT_ID = json.loads(open(r'/var/www/<app_dir>/<app_dir>/client_secrets.json', 'r').read())['web']['client_id']`
+      2. `oauth_flow = flow_from_clientsecrets(r'/var/www/<app_dir>/<app_dir>/client_secrets.json', scope='')`
+
+#### 11.6 - Get OAuth-Logins Working
+  Source: [Udacity](http://discussions.udacity.com/t/oauth-provider-callback-uris/20460) and [Apache](http://httpd.apache.org/docs/2.2/en/vhosts/name-based.html)  
+  
+1. Open http://www.hcidata.info/host2ip.cgi and receive the Host name for your public IP-address, e.g. for 54.200.104.123, its ec2-54-200-104-103.us-west-2.compute.amazonaws.com
+2. Open the Apache configuration files for the web app:
+  `$ sudo nano /etc/apache2/sites-available/FlaskApp.conf`
+3. Paste in the following line below ServerAdmin:  
+  `ServerAlias HOSTNAME`, e.g. ec2-54-200-104-103.us-west-2.compute.amazonaws.com
+4. if you go to e.g. ec2-54-200-104-103.us-west-2.compute.amazonaws.com and your application is not displayed, go to:
+  `$ sudo nano /etc/apache2/sites-enabled/000-default.conf` 
+  1. make sure its contents are the same as that of /etc/apache/sites-available/FlaskApp.conf
+5. To get the Google+ authorization working:  
+  1. Go to the project on the Developer Console: https://console.developers.google.com/project
+  2. Navigate to APIs & auth > Credentials > Edit Settings
+  3. add your host name and public IP-address to your Authorized JavaScript origins and your host name + oauth2callback to Authorized redirect URIs, e.g. http://ec2-54-200-104-103.us-west-2.compute.amazonaws.com/oauth2callback
+6. This would have changed your client_secrets.json file, so grab the new file and update your old file.
+7. Restart Apache:
+  `$ sudo service apache2 restart`
+
