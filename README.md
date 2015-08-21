@@ -220,6 +220,7 @@ Source: [DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-d
   1. Create wsgi file:  
     `$ cd /var/www/FlaskApp` and `$ sudo nano FlaskApp.wsgi`
   2. Paste in the following lines of code:  
+
     ```
       #!/usr/bin/python
       import sys
@@ -256,12 +257,14 @@ Source: [DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-d
 5. Install the Python PostgreSQL adapter psycopg:  
   `$ sudo apt-get install python-psycopg2`
 6. Make sure Flask version number matches Catalog's version number :
+
   ```
     $ python
     >> import flask
     >> flask.__version__
   ```
 7. You may or may not have to run the following code depending on your flask version:
+
   ```
     sudo pip install werkzeug==0.8.3
     sudo pip install flask==0.9
