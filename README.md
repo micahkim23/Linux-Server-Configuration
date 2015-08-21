@@ -1,5 +1,11 @@
 # FSND-P5_Linux-Server-Configuration
 
+PUBLIC-IP-ADDRESS:54.200.104.123
+SSH PORT: 2200
+
+URL: http://ec2-54-200-104-123.us-west-2.compute.amazonaws.com/
+     http://54.200.104.123
+
 A installation of Ubuntu Linux on a virtual machine to host a Flask web application. This includes the installation of updates, a firewall to secure the system from attack vectors, and web and database servers.
 
 This is a walkthrough to project 5 of Udacity's Full Stack Web Developer Nanodegree and deploys project 3 on the virtual machine.
