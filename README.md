@@ -1,4 +1,4 @@
-# FSND-P5_Linux-Server-Configuration
+#Linux-Server-Configuration
 
 PUBLIC-IP-ADDRESS:54.200.104.123
 SSH PORT: 2200
